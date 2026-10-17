@@ -1,0 +1,12 @@
+/**
+ * Archivo: css/componentes.css
+ * Responsabilidad: Agregador de componentes atómicos modularizados por categoría (SOLID - SRP).
+ */
+
+@import url('componentes/tarjetas.css');
+@import url('componentes/formularios.css');
+@import url('componentes/metricas.css');
+@import url('componentes/paneles.css');
+@import url('componentes/pizarra.css');
+@import url('componentes/tablas.css');
+@import url('componentes/pasos.css');

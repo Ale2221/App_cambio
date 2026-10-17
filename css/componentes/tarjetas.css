@@ -1,0 +1,35 @@
+/**
+ * Archivo: css/componentes/tarjetas.css
+ * Responsabilidad: Superficies visuales, tarjetas de resultados y contenedores elevados.
+ */
+
+.tarjeta {
+    background-color: var(--color-fondo-tarjeta);
+    border: 1px solid var(--color-borde);
+    border-radius: var(--radio-lg);
+    padding: var(--espacio-md);
+    box-shadow: var(--sombra-tarjeta);
+    display: flex;
+    flex-direction: column;
+    gap: var(--espacio-sm);
+}
+
+.tarjeta-destacada {
+    background-color: var(--color-fondo-elevado);
+    border-color: var(--color-primario-borde);
+}
+
+.tarjeta-alerta {
+    border-left: 4px solid var(--color-advertencia);
+}
+
+.tarjeta-titulo {
+    font-size: var(--tamano-texto-sm);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-texto-secundario);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}

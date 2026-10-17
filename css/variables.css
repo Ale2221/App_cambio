@@ -1,0 +1,72 @@
+/**
+ * Archivo: css/variables.css
+ * Responsabilidad: Sistema de diseño, tokens de color, tipografía y sombras (Reglas 7 y 8).
+ * Diseñado con estética de terminal financiero premium en modo oscuro para PWA / APK.
+ */
+
+:root {
+    /* Paleta Principal de Fondo y Superficies */
+    --color-fondo-principal: #0a0d14;
+    --color-fondo-tarjeta: #131924;
+    --color-fondo-elevado: #1b2333;
+    --color-fondo-input: #0e131d;
+    --color-borde: #263347;
+    --color-borde-foco: #3b82f6;
+
+    /* Jerarquía Tipográfica de Color */
+    --color-texto-primario: #f8fafc;
+    --color-texto-secundario: #94a3b8;
+    --color-texto-atenuado: #64748b;
+
+    /* Acentos Financieros de Alta Visibilidad */
+    --color-exito: #10b981;
+    --color-exito-fondo: rgba(16, 185, 129, 0.12);
+    --color-exito-borde: rgba(16, 185, 129, 0.28);
+
+    --color-peligro: #ef4444;
+    --color-peligro-fondo: rgba(239, 68, 68, 0.12);
+    --color-peligro-borde: rgba(239, 68, 68, 0.28);
+
+    --color-advertencia: #f59e0b;
+    --color-advertencia-fondo: rgba(245, 158, 11, 0.12);
+    --color-advertencia-borde: rgba(245, 158, 11, 0.28);
+
+    --color-primario: #3b82f6;
+    --color-primario-fondo: rgba(59, 130, 246, 0.12);
+    --color-primario-borde: rgba(59, 130, 246, 0.28);
+
+    --color-oro: #eab308;
+    --color-oro-fondo: rgba(234, 179, 8, 0.12);
+
+    /* Tipografía Nativa y Tabular */
+    --fuente-interfaz: system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    --fuente-numerica: 'SF Mono', Monaco, Consolas, 'Liberation Mono', monospace;
+
+    /* Escala Modular */
+    --tamano-texto-xs: 0.75rem;
+    --tamano-texto-sm: 0.875rem;
+    --tamano-texto-md: 1rem;
+    --tamano-texto-lg: 1.125rem;
+    --tamano-texto-xl: 1.25rem;
+    --tamano-texto-2xl: 1.5rem;
+
+    /* Espaciado */
+    --espacio-xs: 0.25rem;
+    --espacio-sm: 0.5rem;
+    --espacio-md: 1rem;
+    --espacio-lg: 1.5rem;
+    --espacio-xl: 2rem;
+
+    /* Radios y Sombras */
+    --radio-sm: 6px;
+    --radio-md: 10px;
+    --radio-lg: 16px;
+    --radio-pildora: 9999px;
+
+    --sombra-tarjeta: 0 4px 16px rgba(0, 0, 0, 0.45);
+    --sombra-resaltada: 0 8px 28px rgba(0, 0, 0, 0.65);
+
+    /* Transiciones */
+    --transicion-rapida: 0.15s ease-in-out;
+    --transicion-suave: 0.25s ease;
+}

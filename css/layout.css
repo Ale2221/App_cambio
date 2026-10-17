@@ -1,0 +1,148 @@
+/**
+ * Archivo: css/layout.css
+ * Responsabilidad: Estructura general, grillas, contenedores móviles y navegación de la PWA (Regla 7).
+ */
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: var(--color-fondo-principal);
+    color: var(--color-texto-primario);
+    font-family: var(--fuente-interfaz);
+    font-size: var(--tamano-texto-md);
+    line-height: 1.5;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* Contenedor tipo teléfono móvil (Simulador PWA / APK) */
+.contenedor-aplicacion {
+    width: 100%;
+    max-width: 480px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--color-fondo-principal);
+    border-left: 1px solid var(--color-borde);
+    border-right: 1px solid var(--color-borde);
+    padding-bottom: 90px;
+    position: relative;
+}
+
+/* Cabecera superior */
+.cabecera-aplicacion {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background-color: var(--color-fondo-tarjeta);
+    border-bottom: 1px solid var(--color-borde);
+    padding: var(--espacio-md);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.cabecera-titulo {
+    font-size: var(--tamano-texto-lg);
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: var(--espacio-sm);
+}
+
+.etiqueta-version {
+    font-size: var(--tamano-texto-xs);
+    background-color: var(--color-primario-fondo);
+    color: var(--color-primario);
+    border: 1px solid var(--color-primario-borde);
+    padding: 2px 8px;
+    border-radius: var(--radio-pildora);
+    font-weight: 600;
+}
+
+/* Navegación por Pestañas Horizontales */
+.barra-pestanas {
+    display: flex;
+    background-color: var(--color-fondo-elevado);
+    padding: var(--espacio-xs);
+    border-radius: var(--radio-md);
+    gap: var(--espacio-xs);
+    margin: var(--espacio-md);
+}
+
+.boton-pestana {
+    flex: 1;
+    padding: var(--espacio-sm) var(--espacio-xs);
+    background: transparent;
+    border: none;
+    color: var(--color-texto-secundario);
+    font-size: var(--tamano-texto-xs);
+    font-weight: 600;
+    border-radius: var(--radio-sm);
+    cursor: pointer;
+    transition: var(--transicion-rapida);
+    text-align: center;
+}
+
+.boton-pestana.activo {
+    background-color: var(--color-primario);
+    color: var(--color-texto-primario);
+    box-shadow: var(--sombra-tarjeta);
+}
+
+/* Contenido Principal y Vistas */
+.contenido-principal {
+    flex: 1;
+    padding: 0 var(--espacio-md);
+    display: flex;
+    flex-direction: column;
+    gap: var(--espacio-md);
+}
+
+.seccion-vista {
+    display: none;
+    flex-direction: column;
+    gap: var(--espacio-md);
+}
+
+.seccion-vista.activa {
+    display: flex;
+}
+
+/* Barra Fija Inferior con Resumen Vital */
+.barra-resumen-fija {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    max-width: 480px;
+    background-color: var(--color-fondo-tarjeta);
+    border-top: 1px solid var(--color-borde);
+    padding: var(--espacio-sm) var(--espacio-md);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 40;
+    box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.4);
+}
+
+.resumen-columna {
+    display: flex;
+    flex-direction: column;
+}
+
+.resumen-etiqueta {
+    font-size: var(--tamano-texto-xs);
+    color: var(--color-texto-secundario);
+}
+
+.resumen-valor {
+    font-size: var(--tamano-texto-md);
+    font-weight: 700;
+    font-family: var(--fuente-numerica);
+}

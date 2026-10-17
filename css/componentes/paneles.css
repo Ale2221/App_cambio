@@ -1,0 +1,139 @@
+/**
+ * Archivo: css/componentes/paneles.css
+ * Responsabilidad: Paneles colapsables, selector de perfiles de liquidez y cajas explicativas de conversión.
+ */
+
+.panel-contenedor {
+    background-color: var(--color-fondo-tarjeta);
+    border: 1px solid var(--color-borde);
+    border-radius: var(--radio-lg);
+    overflow: hidden;
+    transition: var(--transicion-suave);
+    box-shadow: var(--sombra-tarjeta);
+}
+
+.panel-cabecera {
+    padding: var(--espacio-sm) var(--espacio-md);
+    background-color: var(--color-fondo-elevado);
+    border-bottom: 1px solid var(--color-borde);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    user-select: none;
+}
+
+.panel-titulo {
+    font-size: var(--tamano-texto-sm);
+    font-weight: 700;
+    color: var(--color-texto-primario);
+    display: flex;
+    align-items: center;
+    gap: var(--espacio-sm);
+}
+
+.panel-cuerpo {
+    padding: var(--espacio-md);
+    display: flex;
+    flex-direction: column;
+    gap: var(--espacio-sm);
+}
+
+.panel-colapsado .panel-cuerpo {
+    display: none;
+}
+
+.icono-colapso {
+    font-size: var(--tamano-texto-xs);
+    color: var(--color-texto-secundario);
+    transition: transform var(--transicion-suave);
+}
+
+.panel-colapsado .icono-colapso {
+    transform: rotate(-90deg);
+}
+
+/* Selector de Perfiles Rápidos de Capital */
+.selector-perfiles {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--espacio-xs);
+    margin-bottom: var(--espacio-sm);
+}
+
+.boton-perfil {
+    background-color: var(--color-fondo-input);
+    border: 1px solid var(--color-borde);
+    color: var(--color-texto-secundario);
+    padding: var(--espacio-xs) var(--espacio-sm);
+    border-radius: var(--radio-sm);
+    font-size: var(--tamano-texto-xs);
+    font-weight: 600;
+    cursor: pointer;
+    text-align: center;
+    transition: var(--transicion-suave);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+}
+
+.boton-perfil:hover {
+    border-color: var(--color-primario);
+    color: var(--color-texto-primario);
+}
+
+.boton-perfil.activo {
+    background-color: rgba(240, 185, 11, 0.15);
+    border-color: var(--color-primario);
+    color: var(--color-primario);
+    box-shadow: 0 0 8px rgba(240, 185, 11, 0.2);
+}
+
+/* Panel de Conversión de Liquidez Explicativo */
+.caja-conversion-explicativa {
+    background-color: var(--color-fondo-input);
+    border: 1px solid var(--color-borde);
+    border-radius: var(--radio-md);
+    padding: var(--espacio-xs) var(--espacio-sm);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-size: var(--tamano-texto-xs);
+}
+
+.fila-conversion-detalle {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: var(--fuente-numerica);
+}
+
+.fila-conversion-detalle span:first-child {
+    color: var(--color-texto-secundario);
+}
+
+.fila-conversion-detalle span:last-child {
+    font-weight: 600;
+    color: var(--color-texto-primario);
+}
+
+.conversion-tasa-tag {
+    font-size: 10px;
+    color: var(--color-primario);
+    font-weight: normal;
+    margin-left: 4px;
+}
+
+.barra-equivalencias {
+    background-color: var(--color-fondo-elevado);
+    border: 1px dashed var(--color-borde);
+    border-radius: var(--radio-md);
+    padding: var(--espacio-xs) var(--espacio-sm);
+    font-size: var(--tamano-texto-xs);
+    color: var(--color-texto-secundario);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: var(--fuente-numerica);
+}

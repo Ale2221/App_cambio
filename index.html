@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#0a0d14">
+    <meta name="description" content="Simulador de Arbitraje Cambiario y Tasador Fronterizo para Rubio, Táchira. Optimización de márgenes y protección anti-pérdidas.">
+    <title>Simulador Arbitraje Financiero</title>
+    
+    <!-- Manifiesto PWA para compilación APK con PWABuilder -->
+    <link rel="manifest" href="manifest.json">
+    
+    <!-- Arquitectura CSS Modular (Regla 7) -->
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/componentes.css">
+</head>
+<body>
+    <div class="contenedor-aplicacion">
+        <!-- Cabecera Superior -->
+        <header class="cabecera-aplicacion">
+            <h1 class="cabecera-titulo">
+                Arbitraje Frontera
+            </h1>
+            <span class="etiqueta-version">APK v1.0</span>
+        </header>
+
+        <!-- PANEL 1: Control de Capital y Liquidez Multimoneda (Plegable) -->
+        <main class="contenido-principal">
+            <section class="panel-contenedor" id="panel-capital">
+                <div class="panel-cabecera">
+                    <div class="panel-titulo">
+                        <span>Capital de Trabajo y Fricción</span>
+                        <button type="button" class="boton-ayuda-info" data-ayuda="ayuda-panel-capital" title="Ver qué hace y cómo funciona este módulo">?</button>
+                        <span class="insignia-estado insignia-rentable">Activo</span>
+                    </div>
+                    <span class="icono-colapso">▼</span>
+                </div>
+                <div class="caja-ayuda-desplegable" id="ayuda-panel-capital" style="margin: 8px 16px 0 16px;">
+                    <strong>¿Qué hace y cómo funciona este módulo?</strong>
+                    <p><strong>1. Tu Punto de Partida:</strong> Ingresas el dinero disponible que tienes para operar hoy y seleccionas tu moneda base (Bolívares de bono/sueldo, Pesos de tu trabajo, o Dólares/USDT).</p>
+                    <p><strong>2. Equivalencias en Vivo:</strong> Te muestra al instante a cuánto equivale tu dinero en Dólares y Pesos según las tasas activas del día (Binance y Calle Rubio).</p>
+                    <p><strong>3. Filtro Anti-Pérdidas:</strong> Considera las comisiones de Pago Móvil (0,3%), comisiones de Binance (0,3%) y el colchón de inflación para que las ganancias en las rutas sean 100% netas y reales.</p>
+                </div>
+                <div class="panel-cuerpo">
+                    <!-- Selector Rápido de Perfiles de Trabajo / Liquidez -->
+                    <div class="selector-perfiles">
+                        <button type="button" class="boton-perfil activo" id="perfil-ves" data-moneda="VES">
+                            <span class="insignia-moneda-tag tag-ves">VES</span>
+                            <small>Bolívares (Bono)</small>
+                        </button>
+                        <button type="button" class="boton-perfil" id="perfil-cop" data-moneda="COP">
+                            <span class="insignia-moneda-tag tag-cop">COP</span>
+                            <small>Pesos (Trabajo)</small>
+                        </button>
+                        <button type="button" class="boton-perfil" id="perfil-usd" data-moneda="USD">
+                            <span class="insignia-moneda-tag tag-usd">USD</span>
+                            <small>Dólar / USDT</small>
+                        </button>
+                    </div>
+
+                    <div class="grilla-dual">
+                        <div class="grupo-formulario">
+                            <label class="etiqueta-formulario" for="entrada-moneda-capital">Moneda de Capital</label>
+                            <select id="entrada-moneda-capital" class="campo-entrada">
+                                <option value="VES" selected>Bolívares (VES)</option>
+                                <option value="COP">Pesos Colombianos (COP)</option>
+                                <option value="USD">Dólares / USDT (USD)</option>
+                            </select>
+                        </div>
+                        <div class="grupo-formulario">
+                            <label class="etiqueta-formulario" for="entrada-capital">Monto Disponible</label>
+                            <div class="contenedor-input">
+                                <input type="text" inputmode="decimal" id="entrada-capital" class="campo-entrada campo-monetario" value="130.000">
+                                <span class="unidad-sufijo" id="unidad-capital-sufijo">VES</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Panel Explicativo de Conversión de Capital según Tasas Seleccionadas -->
+                    <div class="caja-conversion-explicativa" id="caja-conversion-capital">
+                        <div class="fila-conversion-detalle">
+                            <span id="etiqueta-conv-1">Equivalente USD (Binance Compra):</span>
+                            <span id="salida-cap-conv-1">≈ $130,65 USD <span class="conversion-tasa-tag" id="tasa-conv-1">(@ 995,00 Bs/$)</span></span>
+                        </div>
+                        <div class="fila-conversion-detalle">
+                            <span id="etiqueta-conv-2">Equivalente COP (Calle Rubio):</span>
+                            <span id="salida-cap-conv-2">≈ 403.000 COP <span class="conversion-tasa-tag" id="tasa-conv-2">(@ 3,10 COP/Bs)</span></span>
+                        </div>
+                        <span id="salida-cap-equivalente" style="display: none;">≈ $130,65 USD | ≈ 403.000 COP</span>
+                    </div>
+
+                    <div class="grilla-dual">
+                        <div class="grupo-formulario">
+                            <div class="etiqueta-formulario con-ayuda">
+                                <label for="entrada-comisiones">Fricción Comisiones (%)</label>
+                                <button type="button" class="boton-ayuda-info" data-ayuda="ayuda-friccion" title="Ver qué significa Fricción de Comisiones">?</button>
+                            </div>
+                            <div class="contenedor-input">
+                                <input type="text" inputmode="decimal" id="entrada-comisiones" class="campo-entrada campo-monetario" value="0,6">
+                                <span class="unidad-sufijo">%</span>
+                            </div>
+                            <div class="caja-ayuda-desplegable" id="ayuda-friccion">
+                                <strong>¿Qué es Fricción de Comisiones?</strong>
+                                <p>Es el porcentaje total que se pierde en comisiones bancarias y de plataforma durante toda la vuelta: Pago Móvil (0,3%), comisión de retiro Binance P2P (0,3%) o tarifas de cajero. Se descuenta de tu ganancia para que el beneficio mostrado sea 100% neto y real.</p>
+                            </div>
+                        </div>
+                        <div class="grupo-formulario">
+                            <div class="etiqueta-formulario con-ayuda">
+                                <label for="entrada-inflacion">Colchón Inflación (%)</label>
+                                <button type="button" class="boton-ayuda-info" data-ayuda="ayuda-inflacion" title="Ver qué significa Colchón de Inflación">?</button>
+                            </div>
+                            <div class="contenedor-input">
+                                <input type="text" inputmode="decimal" id="entrada-inflacion" class="campo-entrada campo-monetario" value="0,5">
+                                <span class="unidad-sufijo">%</span>
+                            </div>
+                            <div class="caja-ayuda-desplegable" id="ayuda-inflacion">
+                                <strong>¿Qué es Colchón de Inflación?</strong>
+                                <p>Es un margen de seguridad preventivo (usualmente 0,5% a 1%) para protegerte de la devaluación del Bolívar o fluctuación del peso durante los minutos que tarda en liberarse el arbitraje. Garantiza que tu ganancia no se pierda por una subida imprevista del dólar.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- PANEL 2: Pizarra de Tasas del Día en Tiempo Real (Banco de Venezuela, BCV, Binance, Denver) -->
+            <section class="panel-contenedor" id="panel-referencias">
+                <div class="panel-cabecera">
+                    <div class="panel-titulo">
+                        <span>Pizarra del Día (En Vivo)</span>
+                        <span class="insignia-estado insignia-rentable" id="insignia-estado-en-vivo">En Línea</span>
+                    </div>
+                    <div class="cabecera-pizarra-acciones">
+                        <button type="button" class="boton-accion-en-vivo" id="boton-actualizar-tasas" title="Consultar BCV y Binance en vivo">
+                            <span id="icono-recarga">🔄</span>
+                            <span>Actualizar</span>
+                        </button>
+                        <span class="icono-colapso">▼</span>
+                    </div>
+                </div>
+                <div class="panel-cuerpo">
+                    <div class="barra-estado-en-vivo">
+                        <span class="punto-pulso-verde"></span>
+                        <span id="texto-estado-tasas">Fecha Valor BCV: Lunes, 19 Octubre 2026 (En Vivo)</span>
+                    </div>
+
+                    <div class="grilla-tasas-referencia">
+                        <div class="tarjeta-referencia">
+                            <div class="cabecera-referencia">
+                                <span class="etiqueta-formulario">Dólar BDV / BCV</span>
+                                <a href="https://www.bcv.org.ve" target="_blank" rel="noopener" class="enlace-consulta">BCV ↗</a>
+                            </div>
+                            <div class="contenedor-input">
+                                <input type="text" inputmode="decimal" id="entrada-bcv-dolar" class="campo-entrada campo-monetario" value="881,0664">
+                                <span class="unidad-sufijo">Bs</span>
+                            </div>
+                        </div>
+                        <div class="tarjeta-referencia">
+                            <div class="cabecera-referencia">
+                                <span class="etiqueta-formulario">Euro BDV / BCV</span>
+                                <a href="https://www.bcv.org.ve" target="_blank" rel="noopener" class="enlace-consulta">BCV ↗</a>
+                            </div>
+                            <div class="contenedor-input">
+                                <input type="text" inputmode="decimal" id="entrada-bcv-euro" class="campo-entrada campo-monetario" value="991,1645">
+                                <span class="unidad-sufijo">Bs</span>
+                            </div>
+                        </div>
+                        <div class="tarjeta-referencia">
+                            <div class="cabecera-referencia">
+                                <span class="etiqueta-formulario">Binance Compra</span>
+                                <a href="https://p2p.binance.com/es/trade/buy/USDT?fiat=VES" target="_blank" rel="noopener" class="enlace-consulta">P2P ↗</a>
+                            </div>
+                            <div class="contenedor-input">
+                                <input type="text" inputmode="decimal" id="entrada-binance-compra" class="campo-entrada campo-monetario" value="980,54">
+                                <span class="unidad-sufijo">Bs</span>
+                            </div>
+                        </div>
+                        <div class="tarjeta-referencia">
+                            <div class="cabecera-referencia">
+                                <span class="etiqueta-formulario">Binance Venta</span>
+                                <a href="https://p2p.binance.com/es/trade/sell/USDT?fiat=VES" target="_blank" rel="noopener" class="enlace-consulta">P2P ↗</a>
+                            </div>
+                            <div class="contenedor-input">
+                                <input type="text" inputmode="decimal" id="entrada-binance-venta" class="campo-entrada campo-monetario" value="1.008,00">
+                                <span class="unidad-sufijo">Bs</span>
+                            </div>
+                        </div>
+                        <div class="tarjeta-referencia">
+                            <div class="cabecera-referencia">
+                                <span class="etiqueta-formulario">Calle Rubio (COP/Bs)</span>
+                                <span class="enlace-consulta">Frontera ↗</span>
+                            </div>
+                            <div class="contenedor-input">
+                                <input type="text" inputmode="decimal" id="entrada-tasa-calle-rubio" class="campo-entrada campo-monetario" value="3,10">
+                                <span class="unidad-sufijo">COP</span>
+                            </div>
+                        </div>
+                        <div class="tarjeta-referencia">
+                            <div class="cabecera-referencia">
+                                <span class="etiqueta-formulario">Denver Dólar Cartel</span>
+                                <span class="enlace-consulta">Denver ↗</span>
+                            </div>
+                            <div class="contenedor-input">
+                                <input type="text" inputmode="decimal" id="entrada-pizarra-denver-dolar" class="campo-entrada campo-monetario" value="1.010">
+                                <span class="unidad-sufijo">Bs</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Fila Informativa de Monedas Complementarias del BCV -->
+                    <div class="barra-equivalencias">
+                        <span>Otras Divisas BCV:</span>
+                        <span>CNY: 131,7857 Bs | TRY: 17,7916 Bs | RUB: 10,6065 Bs</span>
+                    </div>
+
+                    <button type="button" class="boton-aplicar-tasas" id="boton-aplicar-tasas">
+                        ⚡ Aplicar Tasas de Binance a mi Simulador (Compra @ 980,54 | Venta @ 1.008,00)
+                    </button>
+
+                    <!-- Enlaces Directos Oficiales para Consulta Rápida (Blindados contra redirección a CNY) -->
+                    <div class="barra-enlaces-tasas">
+                        <a href="https://www.bancodevenezuela.com" target="_blank" rel="noopener" class="boton-portal boton-portal-bdv">
+                            <span>🏦 Banco de Venezuela</span>
+                        </a>
+                        <a href="https://p2p.binance.com/es/trade/buy/USDT?fiat=VES" target="_blank" rel="noopener" class="boton-portal boton-portal-binance">
+                            <span>🟡 Binance P2P (VES)</span>
+                        </a>
+                        <a href="https://www.bcv.org.ve" target="_blank" rel="noopener" class="boton-portal boton-portal-bcv">
+                            <span>🏛️ Banco Central (BCV)</span>
+                        </a>
+                        <a href="https://p2p.binance.com/es/trade/buy/USDT?fiat=COP" target="_blank" rel="noopener" class="boton-portal boton-portal-binance">
+                            <span>🇨🇴 Binance P2P (COP)</span>
+                        </a>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Barra de Navegación por Pestañas -->
+            <nav class="barra-pestanas">
+                <button type="button" class="boton-pestana activo" data-pestana="vista-usd" id="pestana-usd">Ruta USD</button>
+                <button type="button" class="boton-pestana" data-pestana="vista-cop" id="pestana-cop">Ruta COP</button>
+                <button type="button" class="boton-pestana" data-pestana="vista-denver" id="pestana-denver">Denver</button>
+                <button type="button" class="boton-pestana" data-pestana="vista-billetes" id="pestana-billetes">Billetes</button>
+                <button type="button" class="boton-pestana" data-pestana="vista-universal" id="pestana-universal">Cruce 360°</button>
+            </nav>
+
+            <!-- VISTA 1: Ruta Directa en Dólares (Bs <-> USD/USDT) -->
+            <section class="seccion-vista activa" id="vista-usd">
+                <div class="tarjeta">
+                    <div class="tarjeta-titulo">Cotización Directa (USD / USDT)</div>
+                    
+                    <div class="grilla-dual">
+                        <div class="grupo-formulario">
+                            <label class="etiqueta-formulario" for="entrada-compra-usd">Tú Compras USD a</label>
+                            <div class="contenedor-input">
+                                <input type="text" inputmode="decimal" id="entrada-compra-usd" class="campo-entrada campo-monetario" value="995">
+                                <span class="unidad-sufijo">Bs</span>
+                            </div>
+                        </div>
+                        <div class="grupo-formulario">
+                            <label class="etiqueta-formulario" for="entrada-venta-usd">Tú Vendes USD a</label>
+                            <div class="contenedor-input">
+                                <input type="text" inputmode="decimal" id="entrada-venta-usd" class="campo-entrada campo-monetario" value="1.015">
+                                <span class="unidad-sufijo">Bs</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <label class="contenedor-interruptor">
+                        <div>
+                            <span class="texto-interruptor">Descontar 0.3% Pago Móvil en compra</span>
+                            <span id="insignia-desc-pago-movil" class="insignia-monto-comision texto-peligro">-388,84 Bs</span>
+                        </div>
+                        <span class="control-interruptor">
+                            <input type="checkbox" id="checkbox-pago-movil" checked>
+                            <span class="deslizador-interruptor"></span>
+                        </span>
+                    </label>
+
+                    <label class="contenedor-interruptor">
+                        <div>
+                            <span class="texto-interruptor">Descontar 0.3% Retiro Binance</span>
+                            <span id="insignia-desc-binance" class="insignia-monto-comision texto-peligro">-396,65 Bs</span>
+                        </div>
+                        <span class="control-interruptor">
+                            <input type="checkbox" id="checkbox-retiro-binance" checked>
+                            <span class="deslizador-interruptor"></span>
+                        </span>
+                    </label>
+
+                    <!-- Desglose Matemático Paso a Paso con Restas en Vivo -->
+                    <div class="desglose-pasos" id="desglose-pasos-usd">
+                        <div class="desglose-pasos-titulo">Desglose con Deducciones en Vivo</div>
+                        <div class="paso-fila">
+                            <span class="paso-fila-etiqueta">1. Capital Bruto Inicial:</span>
+                            <span class="paso-fila-valor" id="paso-capital-bruto">130.000,00 Bs</span>
+                        </div>
+                        <div class="paso-fila">
+                            <span class="paso-fila-etiqueta">2. (-) Pago Móvil BDV (0.3%):</span>
+                            <span class="paso-fila-valor paso-resta" id="paso-deduccion-pago-movil">-388,83 Bs</span>
+                        </div>
+                        <div class="paso-fila paso-subtotal">
+                            <span class="paso-fila-etiqueta">(=) Neto para comprar USD:</span>
+                            <span class="paso-fila-valor" id="paso-capital-neto-compra">129.611,17 Bs</span>
+                        </div>
+                        <div class="paso-fila">
+                            <span class="paso-fila-etiqueta">3. Dólares comprados al inicio:</span>
+                            <span class="paso-fila-valor" id="paso-dolares-comprados">$130,26 USD</span>
+                        </div>
+                        <div class="paso-fila">
+                            <span class="paso-fila-etiqueta">4. Venta bruta en Binance:</span>
+                            <span class="paso-fila-valor" id="paso-venta-bruta-binance">132.216,40 Bs</span>
+                        </div>
+                        <div class="paso-fila">
+                            <span class="paso-fila-etiqueta">5. (-) Retiro Binance (0.3%):</span>
+                            <span class="paso-fila-valor paso-resta" id="paso-deduccion-binance">-396,65 Bs</span>
+                        </div>
+                        <div class="paso-fila paso-subtotal">
+                            <span class="paso-fila-etiqueta">(=) Bolívares que caen al banco:</span>
+                            <span class="paso-fila-valor" id="paso-bolivares-netos-cuenta">131.819,75 Bs</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bloque Freno Anti-Pérdidas (Línea Roja) -->
+                <div class="bloque-resultado linea-roja-bloque">
+                    <div class="linea-roja-titulo">
+                        <span>LÍNEA ROJA (PRECIO MÍNIMO DE VENTA)</span>
+                        <span id="salida-estado-rentable" class="insignia-estado insignia-rentable">Rentable</span>
+                    </div>
+                    <div class="linea-roja-valor" id="salida-linea-roja-usd">0,00 Bs</div>
+                    <span class="etiqueta-formulario">Vender por debajo de este monto genera pérdida de poder adquisitivo.</span>
+                </div>
+
+                <!-- Desglose Financiero -->
+                <div class="tarjeta">
+                    <div class="tarjeta-titulo">Balance por Vuelta Completa</div>
+                    <div class="fila-metrica">
+                        <span class="metrica-etiqueta">Dólares Adquiridos Inicio:</span>
+                        <span class="metrica-valor" id="salida-dolares-inicio">$0,00</span>
+                    </div>
+                    <div class="fila-metrica">
+                        <span class="metrica-etiqueta">Bolívares Finales en Cuenta:</span>
+                        <span class="metrica-valor" id="salida-bolivares-finales">0,00 Bs</span>
+                    </div>
+                    <div class="fila-metrica">
+                        <span class="metrica-etiqueta">Comisiones Totales Absorbidas:</span>
+                        <span class="metrica-valor texto-peligro" id="salida-comisiones-totales">0,00 Bs</span>
+                    </div>
+                    <div class="fila-metrica">
+                        <span class="metrica-etiqueta">Ganancia Neta en Bolívares:</span>
+                        <span class="metrica-valor" id="salida-ganancia-bs">+0,00 Bs</span>
+                    </div>
+                    <div class="fila-metrica">
+                        <span class="metrica-etiqueta">Ganancia Libre Real (en USD):</span>
+                        <span class="metrica-valor texto-exito" id="salida-ganancia-usd">+$0,00</span>
+                    </div>
+                    <div class="fila-metrica">
+                        <span class="metrica-etiqueta">Tu Cliente Recibe (por su bono):</span>
+                        <span class="metrica-valor" id="salida-dolares-cliente">$0,00</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- VISTA 2: Ruta en Pesos Colombianos (Bs <-> COP) -->
+            <section class="seccion-vista" id="vista-cop">
+                <div class="tarjeta">
+                    <div class="tarjeta-titulo">Arbitraje en Pesos (COP)</div>
+                    <div class="grilla-dual">
+                        <div class="grupo-formulario">
+                            <label class="etiqueta-formulario" for="entrada-compra-cop">Tú Compras Bs a</label>
+                            <div class="contenedor-input">
+                                <input type="text" inputmode="decimal" id="entrada-compra-cop" class="campo-entrada campo-monetario" value="3,10">
+                                <span class="unidad-sufijo">COP</span>
+                            </div>
+                        </div>
+                        <div class="grupo-formulario">
+                            <label class="etiqueta-formulario" for="entrada-venta-cop">Tú Vendes Bs a</label>
+                            <div class="contenedor-input">
+                                <input type="text" inputmode="decimal" id="entrada-venta-cop" class="campo-entrada campo-monetario" value="3,25">
+                                <span class="unidad-sufijo">COP</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bloque-resultado linea-roja-bloque">
+                    <div class="linea-roja-titulo">LÍNEA ROJA EN PESOS</div>
+                    <div class="linea-roja-valor" id="salida-linea-roja-cop">0,00 COP</div>
+                    <span class="etiqueta-formulario">Tasa mínima de cobro para reponer capital y comisiones bancarias.</span>
+                </div>
+
+                <div class="tarjeta">
+                    <div class="tarjeta-titulo">Balance en Pesos Efectivo</div>
+                    <div class="fila-metrica">
+                        <span class="metrica-etiqueta">Pesos Cobrados al Vender Bs:</span>
+                        <span class="metrica-valor" id="salida-pesos-cobrados">$0 COP</span>
+                    </div>
+                    <div class="fila-metrica">
+                        <span class="metrica-etiqueta">Pesos Pagados para Reponer Bs:</span>
+                        <span class="metrica-valor" id="salida-pesos-reposicion">$0 COP</span>
+                    </div>
+                    <div class="fila-metrica">
+                        <span class="metrica-etiqueta">Ganancia Neta en Pesos:</span>
+                        <span class="metrica-valor texto-exito" id="salida-ganancia-cop">+$0 COP</span>
+                    </div>
+                    <div class="fila-metrica">
+                        <span class="metrica-etiqueta">Equivalente Limpio en Bs:</span>
+                        <span class="metrica-valor" id="salida-ganancia-bs-cop">+0,00 Bs</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- VISTA 3: Auditoría Pizarra Denver -->
+            <section class="seccion-vista" id="vista-denver">
+                <div class="tarjeta tarjeta-alerta">
+                    <div class="tarjeta-titulo">Pizarra de la Competencia (Denver)</div>
+                    <div class="grilla-dual">
+                        <div class="grupo-formulario">
+                            <label class="etiqueta-formulario" for="entrada-denver-compra-cop">Compra Bs (Cartel)</label>
+                            <div class="contenedor-input">
+                                <input type="text" inputmode="decimal" id="entrada-denver-compra-cop" class="campo-entrada campo-monetario" value="3,0">
+                                <span class="unidad-sufijo">COP</span>
+                            </div>
+                        </div>
+                        <div class="grupo-formulario">
+                            <label class="etiqueta-formulario" for="entrada-denver-dolar">Dólar Cartel Bs</label>
+                            <div class="contenedor-input">
+                                <input type="text" inputmode="decimal" id="entrada-denver-dolar" class="campo-entrada campo-monetario" value="1.010">
+                                <span class="unidad-sufijo">Bs</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grupo-formulario">
+                        <label class="etiqueta-formulario" for="entrada-denver-venta-cop-mayor">Venta Bs (+300k COP)</label>
+                        <div class="contenedor-input">
+                            <input type="text" inputmode="decimal" id="entrada-denver-venta-cop-mayor" class="campo-entrada campo-monetario" value="3,3">
+                            <span class="unidad-sufijo">COP</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tarjeta">
+                    <div class="tarjeta-titulo">Radiografía del "Doble Peaje"</div>
+                    <div class="fila-metrica">
+                        <span class="metrica-etiqueta">Pesos que le entregan a tu cliente:</span>
+                        <span class="metrica-valor" id="salida-denver-pesos-intermedios">$0 COP</span>
+                    </div>
+                    <div class="fila-metrica">
+                        <span class="metrica-etiqueta">Tasa Venta Escalonada Aplicada:</span>
+                        <span class="metrica-valor" id="salida-denver-tasa-aplicada">0,0 COP</span>
+                    </div>
+                    <div class="fila-metrica">
+                        <span class="metrica-etiqueta">Dólar Implícito en Pesos:</span>
+                        <span class="metrica-valor" id="salida-denver-dolar-implicito">$0 COP</span>
+                    </div>
+                    <div class="fila-metrica">
+                        <span class="metrica-etiqueta">Dólares que realmente recibe:</span>
+                        <span class="metrica-valor texto-peligro" id="salida-denver-dolares-reales">$0,00</span>
+                    </div>
+                    <div class="fila-metrica">
+                        <span class="metrica-etiqueta">Tasa Real Oculta Pagada:</span>
+                        <span class="metrica-valor texto-advertencia" id="salida-denver-tasa-real">0,00 Bs/$</span>
+                    </div>
+                    <div class="fila-metrica">
+                        <span class="metrica-etiqueta">Dólares extraídos por el triángulo:</span>
+                        <span class="metrica-valor texto-peligro" id="salida-denver-dolares-perdidos">-$0,00</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- VISTA 4: Tasador de Billetes Físicos en Rubio -->
+            <section class="seccion-vista" id="vista-billetes">
+                <div class="tarjeta">
+                    <div class="tarjeta-titulo">Tabla de Castigo por Denominación</div>
+                    <p class="etiqueta-formulario">Precios máximos a pagar para billetes físicos en calle calculados con complejidad O(1):</p>
+                    
+                    <table class="tabla-billetes">
+                        <thead>
+                            <tr>
+                                <th>Tipo de Billete</th>
+                                <th>Castigo</th>
+                                <th>Pagar Máximo</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabla-cuerpo-billetes">
+                            <!-- Inyectado dinámicamente por EvaluadorBilletes.js -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="tarjeta tarjeta-alerta">
+                    <div class="tarjeta-titulo">Regla de Oro en Frontera</div>
+                    <p class="etiqueta-formulario">
+                        Billetes con cinta azul de $100 y $50 son de máxima liquidez. Billetes de $20 a $1 y series anteriores a 1996 ("cara pequeña") jamás se compran a tasa completa. Billetes sellados o rotos están inhabilitados para compras con capital inicial pequeño.
+                    </p>
+                </div>
+            </section>
+
+            <!-- VISTA 5: Cruce Universal 360° (Omnidireccional VES, USD, USDT, COP) -->
+            <section class="seccion-vista" id="vista-universal">
+                <div class="tarjeta tarjeta-destacada">
+                    <div class="tarjeta-titulo">
+                        <span>Taquilla Universal 360°</span>
+                        <span class="insignia-estado insignia-rentable" id="salida-cruce-estado">Activo</span>
+                    </div>
+
+                    <div class="grilla-dual">
+                        <div class="grupo-formulario">
+                            <label class="etiqueta-formulario" for="cruce-moneda-origen">Tengo (Cliente Entrega)</label>
+                            <select id="cruce-moneda-origen" class="campo-entrada">
+                                <option value="VES">Bolívares (VES)</option>
+                                <option value="USD_FISICO" selected>Dólar Físico (USD)</option>
+                                <option value="USDT">Dólar Digital (USDT)</option>
+                                <option value="COP">Pesos (COP)</option>
+                            </select>
+                        </div>
+                        <div class="grupo-formulario">
+                            <label class="etiqueta-formulario" for="cruce-monto-origen">Monto que Entrega</label>
+                            <div class="contenedor-input">
+                                <input type="text" inputmode="decimal" id="cruce-monto-origen" class="campo-entrada campo-monetario" value="100">
+                                <span class="unidad-sufijo" id="cruce-unidad-origen">USD</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grilla-dual">
+                        <div class="grupo-formulario">
+                            <label class="etiqueta-formulario" for="cruce-moneda-destino">Quiero (Tú Entregas)</label>
+                            <select id="cruce-moneda-destino" class="campo-entrada">
+                                <option value="COP" selected>Pesos (COP)</option>
+                                <option value="VES">Bolívares (VES)</option>
+                                <option value="USD_FISICO">Dólar Físico (USD)</option>
+                                <option value="USDT">Dólar Digital (USDT)</option>
+                            </select>
+                        </div>
+                        <div class="grupo-formulario">
+                            <label class="etiqueta-formulario" for="cruce-condicion-billete">Condición de Billete</label>
+                            <select id="cruce-condicion-billete" class="campo-entrada">
+                                <option value="PREMIUM" selected>$100 / $50 Sano (100%)</option>
+                                <option value="MEDIANO">$20 / $10 Sano (-2.5%)</option>
+                                <option value="SENCILLO">$5 / $1 Sano (-5.5%)</option>
+                                <option value="DETERIORADO">Roto / Sellado (Rechazar)</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Resultados del Cruce Directo -->
+                <div class="tarjeta">
+                    <div class="tarjeta-titulo">Liquidación de Operación</div>
+                    <div class="fila-metrica">
+                        <span class="metrica-etiqueta">Tú le entregas a tu cliente:</span>
+                        <span class="metrica-valor texto-exito" id="salida-cruce-entregar">0,00</span>
+                    </div>
+                    <div class="fila-metrica">
+                        <span class="metrica-etiqueta">Denver le entregaría:</span>
+                        <span class="metrica-valor" id="salida-cruce-denver">0,00</span>
+                    </div>
+                    <div class="fila-metrica">
+                        <span class="metrica-etiqueta">Ventaja para tu Cliente (Le Ganas a Denver):</span>
+                        <span class="metrica-valor texto-exito" id="salida-cruce-ventaja">+0,00</span>
+                    </div>
+                    <div class="fila-metrica">
+                        <span class="metrica-etiqueta">Tu Ganancia Neta Comercial:</span>
+                        <span class="metrica-valor texto-exito" id="salida-cruce-ganancia">+0,00</span>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Barra Resumen Fija Inferior -->
+        <footer class="barra-resumen-fija">
+            <div class="resumen-columna">
+                <span class="resumen-etiqueta">Línea de Seguridad</span>
+                <span class="resumen-valor" id="salida-resumen-linea-roja">0,00 Bs</span>
+            </div>
+            <div class="resumen-columna">
+                <span class="resumen-etiqueta">Ganancia Ciclo</span>
+                <span class="resumen-valor texto-exito" id="salida-resumen-ganancia">+$0,00</span>
+            </div>
+        </footer>
+    </div>
+
+    <!-- 1. Capa de Servicios y Utilidades (SRP / SOLID) -->
+    <script src="js/servicios/FormateadorMonedaServicio.js"></script>
+    <script src="js/servicios/ManejadorFormatoEntrada.js"></script>
+    <script src="js/servicios/ProveedorTasasServicio.js"></script>
+
+    <!-- 2. Capa de Dominio Financiero y Tasación (POO / DDD) -->
+    <script src="js/dominio/arbitraje/PoliticaBillete.js"></script>
+    <script src="js/dominio/arbitraje/EvaluadorBilletes.js"></script>
+    <script src="js/dominio/arbitraje/OperacionCambiariaBase.js"></script>
+    <script src="js/dominio/arbitraje/CalculadoraRutaDolares.js"></script>
+    <script src="js/dominio/arbitraje/CalculadoraRutaPesos.js"></script>
+    <script src="js/dominio/arbitraje/AnalizadorCompetenciaDenver.js"></script>
+    <script src="js/dominio/arbitraje/CalculadoraCruceDivisas.js"></script>
+    <script src="js/dominio/arbitraje/ArbitrajeEntidad.js"></script>
+
+    <!-- 3. Capa de Presentación y Orquestación de Interfaz -->
+    <script src="js/controladores/arbitraje/ArbitrajeControlador.js"></script>
+</body>
+</html>

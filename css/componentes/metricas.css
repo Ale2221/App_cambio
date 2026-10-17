@@ -1,0 +1,127 @@
+/**
+ * Archivo: css/componentes/metricas.css
+ * Responsabilidad: Indicadores numéricos, línea roja de seguridad, insignias y estados de rentabilidad.
+ */
+
+.bloque-resultado {
+    background-color: var(--color-fondo-elevado);
+    border-radius: var(--radio-md);
+    padding: var(--espacio-md);
+    display: flex;
+    flex-direction: column;
+    gap: var(--espacio-xs);
+}
+
+.linea-roja-bloque {
+    border: 1px solid var(--color-peligro-borde);
+    background-color: var(--color-peligro-fondo);
+}
+
+.linea-roja-titulo {
+    font-size: var(--tamano-texto-xs);
+    font-weight: 700;
+    color: var(--color-peligro);
+    display: flex;
+    align-items: center;
+    gap: var(--espacio-xs);
+}
+
+.linea-roja-valor {
+    font-size: var(--tamano-texto-xl);
+    font-family: var(--fuente-numerica);
+    font-weight: 700;
+    color: var(--color-texto-primario);
+}
+
+.fila-metrica {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--espacio-xs) 0;
+    border-bottom: 1px solid var(--color-borde);
+}
+
+.fila-metrica:last-child {
+    border-bottom: none;
+}
+
+.metrica-etiqueta {
+    font-size: var(--tamano-texto-xs);
+    color: var(--color-texto-secundario);
+}
+
+.metrica-valor {
+    font-size: var(--tamano-texto-sm);
+    font-weight: 600;
+    font-family: var(--fuente-numerica);
+}
+
+/* Estados de Color y Alertas */
+.texto-exito {
+    color: var(--color-exito);
+}
+
+.texto-peligro {
+    color: var(--color-peligro);
+}
+
+.texto-advertencia {
+    color: var(--color-advertencia);
+}
+
+.insignia-estado {
+    font-size: var(--tamano-texto-xs);
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: var(--radio-sm);
+    text-transform: uppercase;
+}
+
+.insignia-rentable {
+    background-color: var(--color-exito-fondo);
+    color: var(--color-exito);
+    border: 1px solid var(--color-exito-borde);
+}
+
+.insignia-alerta {
+    background-color: var(--color-peligro-fondo);
+    color: var(--color-peligro);
+    border: 1px solid var(--color-peligro-borde);
+}
+
+.insignia-monto-comision {
+    font-size: var(--tamano-texto-xs);
+    font-family: var(--fuente-numerica);
+    font-weight: 700;
+    padding: 2px 6px;
+    border-radius: var(--radio-sm);
+    margin-right: var(--espacio-sm);
+}
+
+/* Tags de Moneda en Perfiles (Sin emojis rotos en Windows / Android) */
+.insignia-moneda-tag {
+    font-size: 10px;
+    font-weight: 800;
+    font-family: var(--fuente-numerica);
+    padding: 1px 6px;
+    border-radius: var(--radio-sm);
+    text-transform: uppercase;
+}
+
+.tag-ves {
+    background-color: rgba(0, 102, 204, 0.2);
+    color: #4da6ff;
+    border: 1px solid rgba(0, 102, 204, 0.4);
+}
+
+.tag-cop {
+    background-color: rgba(255, 193, 7, 0.2);
+    color: #ffc107;
+    border: 1px solid rgba(255, 193, 7, 0.4);
+}
+
+.tag-usd {
+    background-color: rgba(14, 203, 129, 0.2);
+    color: #0ecb81;
+    border: 1px solid rgba(14, 203, 129, 0.4);
+}

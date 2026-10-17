@@ -1,0 +1,165 @@
+/**
+ * Archivo: css/componentes/pizarra.css
+ * Responsabilidad: Pizarra del día en tiempo real, tasas de referencia BCV, Binance y Denver.
+ */
+
+.grilla-tasas-referencia {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--espacio-sm);
+}
+
+.tarjeta-referencia {
+    background-color: var(--color-fondo-input);
+    border: 1px solid var(--color-borde);
+    border-radius: var(--radio-md);
+    padding: var(--espacio-sm);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.cabecera-referencia {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.enlace-consulta {
+    font-size: var(--tamano-texto-xs);
+    color: var(--color-primario);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.enlace-consulta:hover {
+    text-decoration: underline;
+}
+
+/* Indicador y Botón de Tasas en Tiempo Real */
+.cabecera-pizarra-acciones {
+    display: flex;
+    align-items: center;
+    gap: var(--espacio-xs);
+}
+
+.boton-accion-en-vivo {
+    background-color: rgba(240, 185, 11, 0.15);
+    border: 1px solid var(--color-primario);
+    color: var(--color-primario);
+    font-size: var(--tamano-texto-xs);
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: var(--radio-sm);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    transition: var(--transicion-suave);
+}
+
+.boton-accion-en-vivo:hover {
+    background-color: var(--color-primario);
+    color: #000;
+}
+
+.boton-accion-en-vivo.cargando {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+.barra-estado-en-vivo {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: var(--espacio-xs) 0;
+    font-size: var(--tamano-texto-xs);
+    color: var(--color-texto-secundario);
+    border-bottom: 1px solid var(--color-borde);
+    margin-bottom: var(--espacio-xs);
+}
+
+.punto-pulso-verde {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: var(--color-exito);
+    box-shadow: 0 0 0 rgba(14, 203, 129, 0.4);
+    animation: pulso-verde 2s infinite;
+}
+
+@keyframes pulso-verde {
+    0% {
+        box-shadow: 0 0 0 0 rgba(14, 203, 129, 0.7);
+    }
+    70% {
+        box-shadow: 0 0 0 6px rgba(14, 203, 129, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(14, 203, 129, 0);
+    }
+}
+
+.boton-aplicar-tasas {
+    width: 100%;
+    margin-top: var(--espacio-sm);
+    background: linear-gradient(135deg, rgba(240, 185, 11, 0.2), rgba(240, 185, 11, 0.05));
+    border: 1px solid var(--color-primario);
+    color: var(--color-primario);
+    font-size: var(--tamano-texto-xs);
+    font-weight: 700;
+    padding: var(--espacio-xs) var(--espacio-sm);
+    border-radius: var(--radio-sm);
+    cursor: pointer;
+    text-align: center;
+    transition: var(--transicion-suave);
+}
+
+.boton-aplicar-tasas:hover {
+    background-color: var(--color-primario);
+    color: #000;
+}
+
+/* Barra de Enlaces Rápidos a Portales de Tasas */
+.barra-enlaces-tasas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--espacio-xs);
+    margin-top: var(--espacio-sm);
+    padding-top: var(--espacio-sm);
+    border-top: 1px solid var(--color-borde);
+}
+
+.boton-portal {
+    flex: 1 1 calc(50% - var(--espacio-xs));
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--espacio-xs);
+    background-color: var(--color-fondo-elevado);
+    border: 1px solid var(--color-borde);
+    border-radius: var(--radio-sm);
+    padding: var(--espacio-xs) var(--espacio-sm);
+    color: var(--color-texto-primario);
+    font-size: var(--tamano-texto-xs);
+    font-weight: 600;
+    text-decoration: none;
+    transition: var(--transicion-suave);
+}
+
+.boton-portal:hover {
+    border-color: var(--color-primario);
+    background-color: rgba(240, 185, 11, 0.1);
+}
+
+.boton-portal-bdv {
+    border-left: 3px solid #0056b3;
+}
+
+.boton-portal-binance {
+    border-left: 3px solid #f0b90b;
+}
+
+.boton-portal-bcv {
+    border-left: 3px solid #28a745;
+}

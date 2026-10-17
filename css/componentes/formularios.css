@@ -1,0 +1,198 @@
+/**
+ * Archivo: css/componentes/formularios.css
+ * Responsabilidad: Campos de entrada monetaria, grillas, interruptores y botones de ayuda contextual.
+ */
+
+.grupo-formulario {
+    display: flex;
+    flex-direction: column;
+    gap: var(--espacio-xs);
+}
+
+.etiqueta-formulario {
+    font-size: var(--tamano-texto-xs);
+    font-weight: 600;
+    color: var(--color-texto-secundario);
+}
+
+.contenedor-input {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.campo-entrada {
+    width: 100%;
+    background-color: var(--color-fondo-input);
+    border: 1px solid var(--color-borde);
+    border-radius: var(--radio-md);
+    color: var(--color-texto-primario);
+    font-family: var(--fuente-numerica);
+    font-size: var(--tamano-texto-md);
+    font-weight: 600;
+    padding: var(--espacio-sm) var(--espacio-md);
+    padding-right: 50px;
+    outline: none;
+    transition: var(--transicion-rapida);
+    -moz-appearance: textfield;
+}
+
+.campo-entrada::-webkit-outer-spin-button,
+.campo-entrada::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.campo-entrada:focus {
+    border-color: var(--color-borde-foco);
+    box-shadow: 0 0 0 2px var(--color-primario-fondo);
+}
+
+.unidad-sufijo {
+    position: absolute;
+    right: var(--espacio-md);
+    font-size: var(--tamano-texto-xs);
+    font-weight: 700;
+    color: var(--color-texto-atenuado);
+    pointer-events: none;
+}
+
+/* Grilla de Entradas Duales */
+.grilla-dual {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--espacio-sm);
+}
+
+/* Interruptor Táctil (Toggle Switch) */
+.contenedor-interruptor {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--espacio-xs) 0;
+    cursor: pointer;
+}
+
+.texto-interruptor {
+    font-size: var(--tamano-texto-xs);
+    color: var(--color-texto-secundario);
+}
+
+.control-interruptor {
+    position: relative;
+    width: 46px;
+    height: 26px;
+    flex-shrink: 0;
+}
+
+.control-interruptor input {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    margin: 0;
+    z-index: 2;
+    cursor: pointer;
+}
+
+.deslizador-interruptor {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var(--color-fondo-input);
+    border: 1px solid var(--color-borde);
+    border-radius: var(--radio-pildora);
+    transition: var(--transicion-suave);
+}
+
+.deslizador-interruptor:before {
+    position: absolute;
+    content: "";
+    height: 16px;
+    width: 16px;
+    left: 3px;
+    bottom: 3px;
+    background-color: var(--color-texto-secundario);
+    border-radius: 50%;
+    transition: var(--transicion-suave);
+}
+
+.control-interruptor input:checked + .deslizador-interruptor {
+    background-color: var(--color-primario);
+    border-color: var(--color-primario);
+}
+
+.control-interruptor input:checked + .deslizador-interruptor:before {
+    transform: translateX(20px);
+    background-color: var(--color-texto-primario);
+}
+
+/* Botón e Icono de Ayuda Táctil para Android */
+.etiqueta-formulario.con-ayuda {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.boton-ayuda-info {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background-color: var(--color-fondo-input);
+    border: 1px solid var(--color-primario);
+    color: var(--color-primario);
+    font-size: 11px;
+    font-weight: bold;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    padding: 0;
+    transition: var(--transicion-suave);
+    flex-shrink: 0;
+}
+
+.boton-ayuda-info:hover,
+.boton-ayuda-info.activo {
+    background-color: var(--color-primario);
+    color: #000;
+    box-shadow: 0 0 6px rgba(240, 185, 11, 0.5);
+}
+
+/* Caja de Ayuda Desplegable Táctil */
+.caja-ayuda-desplegable {
+    display: none;
+    background-color: #141824;
+    border: 1px solid var(--color-primario);
+    border-radius: var(--radio-sm);
+    padding: var(--espacio-sm);
+    font-size: var(--tamano-texto-xs);
+    color: var(--color-texto-primario);
+    line-height: 1.4;
+    margin-top: 4px;
+    margin-bottom: var(--espacio-xs);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+    animation: fadeIn 0.2s ease-in-out;
+}
+
+.caja-ayuda-desplegable.visible {
+    display: block;
+}
+
+.caja-ayuda-desplegable strong {
+    color: var(--color-primario);
+    display: block;
+    margin-bottom: 3px;
+}
+
+.caja-ayuda-desplegable p {
+    margin: 0;
+    color: var(--color-texto-secundario);
+}
