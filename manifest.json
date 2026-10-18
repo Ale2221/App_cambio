@@ -1,25 +1,109 @@
 {
+  "id": "/App_cambio/",
   "name": "Simulador de Arbitraje Financiero",
-  "short_name": "Arbitraje Frontera",
-  "description": "Calculadora de arbitraje cambiario y tasador de billetes en frontera (Rubio, Táchira).",
+  "short_name": "Arbitraje",
+  "description": "Calculadora de arbitraje cambiario, cruce de divisas y tasador de billetes en frontera.",
   "start_url": "./index.html",
+  "scope": "./",
+  "dir": "ltr",
+  "lang": "es-VE",
   "display": "standalone",
+  "display_override": [
+    "window-controls-overlay",
+    "standalone",
+    "minimal-ui"
+  ],
   "background_color": "#0a0d14",
   "theme_color": "#0a0d14",
   "orientation": "portrait-primary",
-  "lang": "es-VE",
+  "categories": [
+    "finance",
+    "business",
+    "productivity",
+    "utilities"
+  ],
+  "prefer_related_applications": false,
   "icons": [
     {
       "src": "assets/icon-192.png",
       "sizes": "192x192",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
     },
     {
       "src": "assets/icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
+    },
+    {
+      "src": "assets/icon-maskable-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "assets/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "assets/captura-movil.png",
+      "sizes": "768x1376",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Simulador de Arbitraje en Pantalla Móvil"
+    },
+    {
+      "src": "assets/captura-escritorio.png",
+      "sizes": "1376x768",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Pizarra de Tasas y Rutas en Escritorio"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Ruta Dólares",
+      "short_name": "Dólares",
+      "description": "Calcular arbitraje de dólares a efectivo",
+      "url": "./index.html#seccion-dolares",
+      "icons": [
+        {
+          "src": "assets/icon-192.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "Ruta Pesos",
+      "short_name": "Pesos",
+      "description": "Calcular arbitraje de pesos a bolívares",
+      "url": "./index.html#seccion-pesos",
+      "icons": [
+        {
+          "src": "assets/icon-192.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "Cruce Divisas",
+      "short_name": "Cruce",
+      "description": "Calculadora directa de cruce USD, COP y BS",
+      "url": "./index.html#seccion-cruce",
+      "icons": [
+        {
+          "src": "assets/icon-192.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
     }
   ]
 }
